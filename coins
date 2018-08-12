@@ -1,0 +1,28 @@
+//Omar Sultani
+//Comp 424 ~ Rink
+// Assignment 2
+
+public class insertCoinsHere 
+{
+	
+	public static void main (String [] args)
+	{
+		Blockchain blockchain = new Blockchain(4);
+		
+		//Adding blocks to our chain.
+		blockchain.addBlock(blockchain.newBlock("Bitcoin"));
+		blockchain.addBlock(blockchain.newBlock("Los Angeles Coin"));
+		blockchain.addBlock(blockchain.newBlock("CSUN Coin"));
+		blockchain.addBlock(blockchain.newBlock("IHOW Coin "));
+
+		blockchain.addBlock(blockchain.newBlock("test Coin "));
+		
+		System.out.println(blockchain);
+
+		//Adding our own block to the chain, it will say it's invalid.
+		//blockchain.addBlock(new Block(15, System.currentTimeMillis(), "testing", "Block invalid"));
+		
+		System.out.println("Blockchain validity: " + blockchain.isBlockChainValid());
+		System.out.println(blockchain);
+	}
+}
