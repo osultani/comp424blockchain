@@ -1,0 +1,119 @@
+//Omar Sultani
+//Comp 424 ~ Rink
+// Assignment 2
+
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.sql.Date;
+
+public class Block 
+{
+	
+	private int index, arbNumber;
+	private long time;
+	private String currentHash;
+	private String previouscurrentHash;
+	private String data;
+	
+	
+	public int getIndex() 
+	{
+		return index;
+	}
+
+
+	public long getTime() 
+	{
+		return time;
+	}
+
+
+	public String getcurrentHash() 
+	{
+		return currentHash;
+	}
+
+
+	public String getPreviouscurrentHash() 
+	{
+		return previouscurrentHash;
+	}
+
+
+	public String getData() 
+	{
+		return data;
+	}
+
+
+	public Block(int index, long time, String previouscurrentHash, String data) 
+	{
+	
+		this.index = index;
+		this.time = time;
+		this.previouscurrentHash = previouscurrentHash;
+		this.data = data;
+		arbNumber = 0;
+		currentHash = Block.calculatecurrentHash(this);
+	}
+	
+	public String str()
+	{
+		return index + time + previouscurrentHash + data + arbNumber;
+	}
+	
+	
+	public String toString()
+	{
+		StringBuilder builder = new StringBuilder();
+		builder.append("Block #").append(index).append("  [previouscurrentHash : ").append(previouscurrentHash).
+		append(", ").append("time : ").append(new Date(time)).append(", ").append(data).append(", ").
+		append("currentHash : ").append(currentHash).append("]");
+		
+		return builder.toString();
+	}
+	
+	public static String calculatecurrentHash(Block block)
+	{
+		if (block != null) 
+		{ MessageDigest digest = null;
+		
+			try {
+			digest = MessageDigest.getInstance("SHA-256");
+		}
+		
+		catch (NoSuchAlgorithmException e)
+		{
+			return null;
+		}
+			String txt = block.str();
+			final byte bytes[] = digest.digest(txt.getBytes());
+			final StringBuilder builder = new StringBuilder();
+			
+			for (final byte b : bytes)
+			{
+				String hex = Integer.toHexString(0xff & b);
+				
+				if (hex.length() == 1)
+				{
+					builder.append('0');
+				}	
+				builder.append(hex);
+			}			
+			return builder.toString();
+		}
+		return null;
+	}
+	
+	public void mineBlock (int difficulty)
+	{
+		arbNumber = 0;
+		
+		while (!getcurrentHash().substring(0, difficulty).equals(Building.zeros(difficulty)))
+		{
+			arbNumber++;
+			currentHash = Block.calculatecurrentHash(this);
+		}
+	}
+}
